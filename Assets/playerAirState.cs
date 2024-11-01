@@ -1,17 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Windows;
 
-
-public class playerMoveState : playerGroundState
+public class playerAirState : playerState
 {
-
-
-    public playerMoveState(player _player, playerStateMachine _playerStateMachine, string _animBoolName) : base(_player, _playerStateMachine, _animBoolName)
+    public playerAirState(player _player, playerStateMachine _playerStateMachine, string _animBoolName) : base(_player, _playerStateMachine, _animBoolName)
     {
     }
 
+    // Start is called before the first frame update
     public override void Enter()
     {
         base.Enter();
@@ -25,9 +22,9 @@ public class playerMoveState : playerGroundState
     public override void updata()
     {
         base.updata();
-       player.Movement(xInput, player.rb.velocity.y);
+        //player.Movement(xInput, player.rb.velocity.y);
 
-        if (xInput == 0)
+        if (player.isGroundCheck())
         {
             playerStateMachine.changeState(player.IdolState);
 
