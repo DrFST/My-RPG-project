@@ -9,6 +9,7 @@ public class playerState
     protected playerStateMachine playerStateMachine;
     protected Entity Entity;
     private string animBoolName;
+    public float dashiTime;
 
     protected float xInput;
     public playerState(player _player ,playerStateMachine _playerStateMachine ,string _animBoolName) { 
@@ -27,7 +28,7 @@ public class playerState
     }
     public virtual void updata()
     {
-
+        dashiTime -= Time.deltaTime;
         xInput = Input.GetAxisRaw("Horizontal");
         player.anim.SetFloat("yVelocity", player.rb.velocity.y);
     }

@@ -581,7 +581,7 @@ Transform:
   m_GameObject: {fileID: 1149451172}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.6, y: -0.25, z: 0}
+  m_LocalPosition: {x: -5.52, y: -0.22, z: 0}
   m_LocalScale: {x: 1.5971582, y: 1.7560922, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -606,11 +606,9 @@ MonoBehaviour:
   anim: {fileID: 0}
   jumpForce: 15
   moveSpeed: 8
-  dashiDuration: 0.25
-  dashiTime: 0
-  dashSpeed: 25
-  dashCloudDown: 1
-  comboTime: 1
+  dashiDuration: 0.2
+  dashSpeed: 15
+  comboTime: 0.93
   groundCheck: {fileID: 499539072}
   wallCheck: {fileID: 217896279}
   groundCheckDis: 0.6

@@ -23,10 +23,14 @@ public class playerGroundState : playerState
     public override void updata()
     {
         base.updata();
-       
 
-        
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Space)&& player.isGroundCheck())
+        if (!player.isGroundCheck())
+        {
+            playerStateMachine.changeState(player.AirState);
+
+        }
+
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Space)&& player.isGroundCheck())
             {
                 playerStateMachine.changeState(player.JumpState);
 

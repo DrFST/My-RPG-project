@@ -15,9 +15,10 @@ public class player : MonoBehaviour
     public playerAirState AirState { get; private set; }
 
     public playerGroundState GroundState { get; private set; }
+    public playerDashState DashState { get; private set; }
 
 
-
+    
     public Rigidbody2D rb;
     public Animator anim;
     private float xInput;
@@ -28,10 +29,9 @@ public class player : MonoBehaviour
     [SerializeField] private float moveSpeed;
 
     [Header("dash info")]
-    [SerializeField] private float dashiDuration;
-    [SerializeField] private float dashiTime;
-    [SerializeField] private float dashSpeed;
-    [SerializeField] private float dashCloudDown;
+    public float dashiDuration;
+    public float dashSpeed;
+    public float dashDir { get; private set; }
 
     [Header("attack info")]
     private bool isAttacking;
@@ -63,6 +63,8 @@ public class player : MonoBehaviour
         JumpState = new playerJumpState(this, StateMachine, "Jump");
         AirState= new playerAirState(this, StateMachine, "Jump");
         GroundState = new playerGroundState(this, StateMachine, "isGround");
+        DashState = new playerDashState(this, StateMachine, "Dash");
+
     }
 
     // Start is called before the first frame update
@@ -71,7 +73,6 @@ public class player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
 
-
         StateMachine.Initalize(IdolState);
 
     }
@@ -79,19 +80,13 @@ public class player : MonoBehaviour
     // Update is called once per frame
     protected  void Update() 
     {
-
-        isGroundCheck();
         StateMachine. currentState.updata();
-      
+        isGroundCheck();
+        DashControllers();
+
 
         comboWindowCounter -= Time.deltaTime;
-        dashiTime -= Time.deltaTime;
 
-
-        
-        //CheckInput();
-        //AnimatorControllers();
-        //DashControllers();
         if (comboWindowCounter < 0)
         {
             attackCounter = 0;
@@ -110,79 +105,40 @@ public class player : MonoBehaviour
 
     }
 
-    //输入键检测
-    //private void CheckInput()
-    //{
-    //    //xInput = UnityEngine.Input.GetAxisRaw("Horizontal");
-
-
-
-    //    if (UnityEngine.Input.GetKeyDown(KeyCode.Space))
-    //    {
-    //        jump();
-    //    }
-    //    if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse0))
-    //    {
-    //        isAttacking = true;
-           
-    //        comboWindowCounter = comboTime;
-    //    }
-
-
-    //}
 
     //冲刺判定
-    //private  void DashControllers()
-    //{
+    public void DashControllers()
+    {
 
-    //    if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift) && dashiTime < 0 - dashCloudDown)
-    //    {
-    //        dashiTime = dashiDuration;
-    //    }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.LeftShift) )
+        {
+            dashDir= UnityEngine.Input.GetAxisRaw("Horizontal");
 
-    //}
+            if (dashDir==0 ) {
+                dashDir = fachingDir;
+            }
+
+
+            StateMachine.changeState(DashState);
+        }
+    }
+    //冲刺
+    public void SetVelocity(float _xVelocity, float _YVelocity)
+    {
+        rb.velocity = new Vector2(_xVelocity , _YVelocity);
+
+        FlipControllers(_xVelocity);
+
+    }
 
     //运动
     public void Movement(float _xVelocity, float _YVelocity)
     {
-        //if (dashiTime > 0)
-        //{
-        //    rb.velocity = new Vector2(_xVelocity * dashSpeed, 0);
-
-        //}
-        //else
-        //{
-
+       
         rb.velocity = new Vector2(_xVelocity * moveSpeed, _YVelocity);
 
         FlipControllers(_xVelocity);
-        //}
     }
-
-    //跳跃
-    //private void jump(float _xVelocity, float _YVelocity)
-    //{
-    //    if (isGround)
-    //    {
-    //        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-    //    }
-    //}
-
-    //动画控制器
-    //private void AnimatorControllers()
-    //{
-
-    //    //isMoving = rb.velocity.x != 0;
-
-    //    //anim.SetFloat("yVelocity", rb.velocity.y);
-    //    //anim.SetBool("isMoving", isMoving);
-    //    //anim.SetBool("isGround", isGround);
-    //    //anim.SetBool("isDashing", dashiTime > 0);
-    //    //anim.SetBool("isAttacking", isAttacking);
-    //    //anim.SetInteger("attackCounter", attackCounter);
-
-    //}
-
 
     //检查是否处于接地状态
     public bool isGroundCheck()
@@ -210,7 +166,6 @@ public class player : MonoBehaviour
     //地面射线检测
     protected  void OnDrawGizmos()
     {
-        //Gizmos.DrawLine(transform.position, new Vector3(transform.position.x, transform.position.y - groundCheckDis));
 
         Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDis));
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDis, wallCheck.position.y ));
