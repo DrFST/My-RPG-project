@@ -2055,11 +2055,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   anim: {fileID: 0}
-  jumpForce: 15
-  moveSpeed: 8
-  dashiDuration: 0.2
-  dashSpeed: 15
-  dashCoolDown: 1
+  facingDir: 1
+  facingRight: 1
+  fachingDir: 1
+  fachingRight: 1
   groundCheck: {fileID: 499539072}
   wallCheck: {fileID: 217896279}
   groundCheckDis: 0.6
@@ -2067,11 +2066,15 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
+  jumpForce: 15
+  moveSpeed: 8
+  dashiDuration: 0.2
+  dashSpeed: 15
+  dashCoolDown: 1
+  dashTimer: 0
   wallJumpForce: {x: 5, y: 10}
   wallJumpCooldown: 1
   lastwallJumpTime: 0
-  fachingDir: 1
-  fachingRight: 1
 --- !u!70 &1149451179
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

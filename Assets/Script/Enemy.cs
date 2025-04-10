@@ -3,41 +3,36 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Entity
 {
     public EnemyStateMachine StateMachine { get; private set; }
-    public EnemyIdolState IdolState { get; private set; }
-    public EnemyMoveState MoveState { get; private set; }
+    //public EnemyIdolState IdolState { get; private set; }
+    //public EnemyMoveState MoveState { get; private set; }
 
-    public Rigidbody2D rb;
-    public Animator anim;
-    private float xInput;
+    //private float xInput;
 
     [Header("Move info")]
     [SerializeField] public float moveSpeed;
 
-    [Header("face info")]
-    [SerializeField] public int fachingDir = 1;
-    [SerializeField] protected bool fachingRight = true;
+ 
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         StateMachine = new EnemyStateMachine();
-        IdolState = new EnemyIdolState(this, StateMachine, "Idol");
-        MoveState = new EnemyMoveState(this, StateMachine, "Move");
+       // IdolState = new EnemyIdolState(this, StateMachine, "Idol");
+        //MoveState = new EnemyMoveState(this, StateMachine, "Move");
        
     }
-        void Start()
+    protected override void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponentInChildren<Animator>();
-
-        StateMachine.Initalize(IdolState);
+        base.Start();
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         StateMachine.currentState.update();
     }
 
@@ -48,23 +43,5 @@ public class Enemy : MonoBehaviour
 
         FlipControllers(_xVelocity);
     }
-
-    //面相控制
-    protected virtual void FlipControllers(float _x)
-    {
-        if (_x > 0 && !fachingRight)
-            Flip();
-        else if (_x < 0 && fachingRight)
-            Flip();
-    }
-
-    //转向
-    public virtual void Flip()
-    {
-        fachingDir = fachingDir * -1;
-        fachingRight = !fachingRight;
-        transform.Rotate(0, 180, 0);
-    }
-
 
 }
